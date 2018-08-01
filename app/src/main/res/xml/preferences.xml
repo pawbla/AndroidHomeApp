@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="Podstawowe ustawienia">
+        <EditTextPreference
+            android:dialogTitle="Użytkownik"
+            android:key="userName"
+            android:summary=""
+            android:positiveButtonText="OK"
+            android:negativeButtonText="Cancel"
+            android:dialogMessage="Edytuj nazwę użytkownika"
+            android:title="Użytkownik" />
+        <EditTextPreference
+            android:dialogTitle="IP/adres serwera"
+            android:key="ipKey"
+            android:summary=""
+            android:positiveButtonText="OK"
+            android:negativeButtonText="Cancel"
+            android:dialogMessage="Edytuj adres lub IP serwera"
+            android:title="Adres serwera" />
+        <Preference
+            android:title="Rejestruj"
+            android:key="reg"
+            android:summary="Zarejestruj używająć podanego użytkownika i IP"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
