@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         addMainFragment();
 
-        new WebServiceHandler(MainActivity.this).execute();
+        new WebServiceHandler(MainActivity.this).execute("username", "jakisUser", "password", "jakisPassword");
     }
 
     @Override
@@ -122,3 +122,12 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 }
+
+/*
+cases when proper fragment shall appears:
+
+1. No active Network -> Info fragment with reconnect
+2. Unable to connect with server -> Info fragment with reconnect
+3. No auth -> Registration fragment
+
+ */

@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,17 +15,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-public class WebServiceHandler extends AsyncTask<String, Void, String> {
 
-    //private ProgressBar progressBar;
+public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
+
     private Context context;
-    //private Dialog dialog;
     private ProgressDialog progressDialog;
+    private HttpURLConnection connection;
 
     public WebServiceHandler(Context context) {
         this.context = context;
-
     }
 
     protected void onPreExecute() {
@@ -35,52 +35,63 @@ public class WebServiceHandler extends AsyncTask<String, Void, String> {
         progressDialog.show();
     }
 
-    protected String doInBackground(String... params) {
-        Log.d("Apps WebServiceHandler","doInBackground");
-        String response = "";
-        //establish connection "http://jsonplaceholder.typicode.com/posts/1"
+    protected List<String> doInBackground(String... params) {
+        Log.d("Apps WebServiceHandler","doInBackground. Params length: " + params.length);
+        List<String> response =  new ArrayList<>();
+        response.add(0, "");
+        response.add(1, "");
+        //establish http connection "http://jsonplaceholder.typicode.com/posts/1"
         try {
-            URL url = new URL("http://192.168.1.135:8080/registrationRest");
-            Log.d("Apps WebServiceHandler","doInBackground - 1");
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            Log.d("Apps WebServiceHandler","doInBackground - 2");
-            //connection.setRequestProperty("Authorization", header);
+            URL url = new URL("http://192.168.1.60:8080/registrationRest");
+            Log.d("Apps WebServiceHandler", "doInBackground - 1");
+            connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(10000);
-            //allow to send datas
-                //connection.setDoOutput(true);
+
             //set request property type
-            Log.d("Apps WebServiceHandler","doInBackground - 3");
-            //set request method
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-            //create objects to sending datas
-            JSONObject data = new JSONObject();
-            data.put("username", "jakisUser");
-            data.put("password", "jakisPassword");
-            //send object
-            Log.d("Apps WebServiceHandler","doInBackground - 4");
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
-            writer.write(data.toString());
-            writer.close();
-            connection.connect();
-            Log.d("Apps WebServiceHandler","doInBackground - 5: " + connection.getResponseCode());
-            if (connection.getResponseCode() != 200) {
-                return null;
+            Log.d("Apps WebServiceHandler", "doInBackground - 2");
+            //set params as POST data in other case only receive datas via GET request
+            if (params.length > 0) {
+                Log.d("Apps WebServiceHandler", "doInBackground - 3 - POST");
+
+                //set request method
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+                //create objects to sending datas
+                JSONObject data = new JSONObject();
+                //prepare data to be sent via POST
+                for (int i = 0; i < params.length; i = i + 2) {
+                    Log.d("Apps WebServiceHandler", "doInBackground - 4 - put data " + i);
+                    data.put(params[i], params[i+1]);
+                }
+
+                //send object
+                Log.d("Apps WebServiceHandler", "doInBackground - 5");
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+                writer.write(data.toString());
+                writer.close();
             }
-            InputStream in = new BufferedInputStream(connection.getInputStream());
-            response = streamToString(in);
-            Log.d("Apps WebServiceHandler","Response code: " + connection.getResponseCode() + " resp:" + response);
-            connection.disconnect();
+            connection.connect();
+            Log.d("Apps WebServiceHandler", "doInBackground - 6: " + connection.getResponseCode());
+            response.add(0, Integer.toString(connection.getResponseCode()));
+            if (connection.getResponseCode() == 200) {
+                //fetch data
+                InputStream in = new BufferedInputStream(connection.getInputStream());
+                response.add(1, streamToString(in));
+                //close connection
+                Log.d("Apps WebServiceHandler","Response code: " + connection.getResponseCode() + " resp:" + response);
+                connection.disconnect();
+            }
         } catch (Exception e) {
-            Log.d("Apps WebServiceHandler","Exception has appeared: " + e);
+            response.add(0, "0");
+            Log.w("Apps WebServiceHandler","Exception has appeared: " + e);
         }
+        Log.w("Apps WebServiceHandler","Response generated: response code " + response.get(0) + " message: " + response.get(1));
         return response;
     }
 
-    protected void onPostExecute(String p) {
+    protected void onPostExecute( List<String> p) {
         Log.d("Apps WebServiceHandler","OnPostExecute");
-        //progressBar.setVisibility(ProgressBar.INVISIBLE);
-        //dialog.dismiss();
         progressDialog.dismiss();
     }
 
@@ -95,7 +106,7 @@ public class WebServiceHandler extends AsyncTask<String, Void, String> {
             }
             reader.close();
         } catch (IOException e) {
-            Log.d("HomeApp", "Convert STREAM TO STRING error has occured: " + e);;
+            Log.w("HomeApp", "Convert STREAM TO STRING error has occurred: " + e);;
         }
         return stringBuilder.toString();
     }
