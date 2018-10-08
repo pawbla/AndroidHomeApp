@@ -18,7 +18,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.ProgressDialog.STYLE_SPINNER;
 
+/*
+fetched string args: fileLocation, pair of parameters to be sent as list e.g. "key1", "val1", ...
+returned list: <return code>, <message>
+ */
 public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
 
     private Context context;
@@ -32,7 +37,11 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
     protected void onPreExecute() {
         Log.d("Apps WebServiceHandler","onPreExecute");
         progressDialog = new ProgressDialog(context);
+        progressDialog.setProgressStyle(STYLE_SPINNER);
+        progressDialog.setMessage("Łączenie z serwisem...");
         progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     protected List<String> doInBackground(String... params) {
@@ -42,7 +51,7 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
         response.add(1, "");
         //establish http connection "http://jsonplaceholder.typicode.com/posts/1"
         try {
-            URL url = new URL("http://192.168.1.60:8080/registrationRest");
+            URL url = new URL("http://192.168.1.60:8080/" + params[0]);
             Log.d("Apps WebServiceHandler", "doInBackground - 1");
             connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(10000);
@@ -50,7 +59,7 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
             //set request property type
             Log.d("Apps WebServiceHandler", "doInBackground - 2");
             //set params as POST data in other case only receive datas via GET request
-            if (params.length > 0) {
+            if (params.length > 1) {
                 Log.d("Apps WebServiceHandler", "doInBackground - 3 - POST");
 
                 //set request method
@@ -60,7 +69,7 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
                 //create objects to sending datas
                 JSONObject data = new JSONObject();
                 //prepare data to be sent via POST
-                for (int i = 0; i < params.length; i = i + 2) {
+                for (int i = 1; i < params.length; i = i + 2) {
                     Log.d("Apps WebServiceHandler", "doInBackground - 4 - put data " + i);
                     data.put(params[i], params[i+1]);
                 }

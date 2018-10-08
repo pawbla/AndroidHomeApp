@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         addMainFragment();
 
-        new WebServiceHandler(MainActivity.this).execute("username", "jakisUser", "password", "jakisPassword");
+        new WebServiceHandler(MainActivity.this).execute("registrationRest", "username", "jakisUser", "password", "jakisPassword");
     }
 
     @Override
