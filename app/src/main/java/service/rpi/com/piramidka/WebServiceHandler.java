@@ -29,6 +29,7 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
     private Context context;
     private ProgressDialog progressDialog;
     private HttpURLConnection connection;
+    List<String> response =  new ArrayList<>();
 
     public WebServiceHandler(Context context) {
         this.context = context;
@@ -46,7 +47,6 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
 
     protected List<String> doInBackground(String... params) {
         Log.d("Apps WebServiceHandler","doInBackground. Params length: " + params.length);
-        List<String> response =  new ArrayList<>();
         response.add(0, "");
         response.add(1, "");
         //establish http connection "http://jsonplaceholder.typicode.com/posts/1"
@@ -68,7 +68,7 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
 
                 //create objects to sending datas
                 JSONObject data = new JSONObject();
-                //prepare data to be sent via POST
+                //prepare data to be sent via POST - assign pair of datas
                 for (int i = 1; i < params.length; i = i + 2) {
                     Log.d("Apps WebServiceHandler", "doInBackground - 4 - put data " + i);
                     data.put(params[i], params[i+1]);

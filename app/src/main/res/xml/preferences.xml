@@ -10,6 +10,15 @@
             android:dialogMessage="Edytuj nazwę użytkownika"
             android:title="Użytkownik" />
         <EditTextPreference
+            android:dialogTitle="Hasło"
+            android:key="userPassword"
+            android:summary=""
+            android:positiveButtonText="OK"
+            android:negativeButtonText="Cancel"
+            android:dialogMessage="Podaj hasło"
+            android:title="Hasło"
+            android:inputType="textPassword"/>
+        <EditTextPreference
             android:dialogTitle="IP/adres serwera"
             android:key="ipKey"
             android:summary=""
