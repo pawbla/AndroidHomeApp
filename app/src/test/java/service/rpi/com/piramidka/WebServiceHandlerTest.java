@@ -6,6 +6,8 @@ import android.test.mock.MockContext;
 import org.junit.Before;
 import org.junit.Test;
 
+import service.rpi.com.piramidka.webservice.WebServiceHandler;
+
 import static org.mockito.Mockito.mock;
 
 public class WebServiceHandlerTest {

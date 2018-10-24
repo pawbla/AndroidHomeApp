@@ -1,8 +1,11 @@
 package service.rpi.com.piramidka;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,11 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import service.rpi.com.piramidka.webservice.WebServiceConnector;
+import service.rpi.com.piramidka.webservice.WebServiceConnectorInterface;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private TextView tv;
+    private WebServiceConnectorInterface webConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionbar.setDisplayHomeAsUpEnabled(true);
-
+        actionbar.setDisplayHomeAsUpEnabled(true);;
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         tv = findViewById(R.id.titleTextView);
@@ -81,14 +86,14 @@ public class MainActivity extends AppCompatActivity {
                     public void onDrawerOpened(View drawerView) {
                         // Respond when the drawer is opened
                         //invalidateOptionsMenu();
-                        Log.d("Aplikacja", "Open drawer ");
+                        Log.d("Apps Main", "Open drawer ");
                     }
 
                     @Override
                     public void onDrawerClosed(View drawerView) {
                         // Respond when the drawer is closed
                         invalidateOptionsMenu();
-                        Log.d("Aplikacja", "Close drawer ");
+                        Log.d("Apps Main", "Close drawer ");
                     }
 
                     @Override
@@ -97,10 +102,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
         addMainFragment();
-        new WebServiceHandler(MainActivity.this).execute("registrationCheck/1234_Pawel");
-       //new WebServiceHandler(MainActivity.this).execute("registrationRest", "username", "jakisUser", "password", "jakisPassword");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Create web Connector object
+        webConnector = new WebServiceConnector(MainActivity.this);
+        webConnector.connect("registrationCheck/" + webConnector.prepareUserName());
+        webConnector.showToastPopup();
     }
 
     @Override

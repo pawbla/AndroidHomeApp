@@ -1,4 +1,4 @@
-package service.rpi.com.piramidka;
+package service.rpi.com.piramidka.webservice;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -43,13 +43,14 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
         progressDialog.show();
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+        Log.d("Apps WebServiceHandler","onPreExecute 2");
     }
 
     protected List<String> doInBackground(String... params) {
         Log.d("Apps WebServiceHandler","doInBackground. Params length: " + params.length);
         response.add(0, "");
         response.add(1, "");
-        //establish http connection "http://jsonplaceholder.typicode.com/posts/1"
+        //192.168.1.60
         try {
             URL url = new URL("http://192.168.1.60:8080/" + params[0]);
             Log.d("Apps WebServiceHandler", "doInBackground - 1");

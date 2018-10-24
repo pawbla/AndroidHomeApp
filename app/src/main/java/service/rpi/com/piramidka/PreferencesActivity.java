@@ -17,6 +17,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import service.rpi.com.piramidka.webservice.RegisterUser_WebServiceConnector;
+import service.rpi.com.piramidka.webservice.WebServiceConnectorInterface;
+import service.rpi.com.piramidka.webservice.WebServiceHandler;
+
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -49,6 +53,8 @@ public class PreferencesActivity extends AppCompatActivity {
         private EditTextPreference ipKey;
         private Preference regB;
 
+        private WebServiceConnectorInterface webConnector;
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -69,7 +75,9 @@ public class PreferencesActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Log.d("Apps","Registration button pressed." + preference.getKey());
-                    registerUser();
+                    webConnector = new RegisterUser_WebServiceConnector(getActivity());
+                    webConnector.connect("registrationRest", "username", webConnector.prepareUserName(), "password", preferences.getString(PASSWORD_FIELD, ""));
+                    webConnector.showToastPopup();
                     return true;
                 }
             });
@@ -120,6 +128,7 @@ public class PreferencesActivity extends AppCompatActivity {
             ipKey.setSummary(iKey);
         }
 
+        /*
         private void registerUser() {
             List<String> response = new ArrayList<>();
             try {
@@ -187,5 +196,6 @@ public class PreferencesActivity extends AppCompatActivity {
             }
             Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
         }
+        */
     }
 }
