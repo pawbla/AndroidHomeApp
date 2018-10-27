@@ -15,7 +15,7 @@ public class RegisterUser_WebServiceConnector extends WebServiceConnector {
         this.context = context;
     }
 
-    public void showToastPopup () {
+    protected void showToastPopup () {
         String msg;
         //An exception has occured durig getting data in Async Task
         if (response.get(0) == null) {

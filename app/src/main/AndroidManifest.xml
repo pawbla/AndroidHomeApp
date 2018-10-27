@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name=".PreferencesActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".WeatherActivity"
             android:parentActivityName=".MainActivity" />

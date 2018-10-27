@@ -2,7 +2,6 @@ package service.rpi.com.piramidka;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -11,16 +10,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import service.rpi.com.piramidka.webservice.RegisterUser_WebServiceConnector;
 import service.rpi.com.piramidka.webservice.WebServiceConnectorInterface;
-import service.rpi.com.piramidka.webservice.WebServiceHandler;
-
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -28,7 +20,7 @@ public class PreferencesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferencesFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.preferencesFragmentHolder, new PreferencesFragment()).commit();
 
         //add toolbar
         Toolbar myToolbar = findViewById(R.id.preferenceToolbar);
@@ -77,7 +69,7 @@ public class PreferencesActivity extends AppCompatActivity {
                     Log.d("Apps","Registration button pressed." + preference.getKey());
                     webConnector = new RegisterUser_WebServiceConnector(getActivity());
                     webConnector.connect("registrationRest", "username", webConnector.prepareUserName(), "password", preferences.getString(PASSWORD_FIELD, ""));
-                    webConnector.showToastPopup();
+                    //webConnector.showToastPopup();
                     return true;
                 }
             });
@@ -127,75 +119,5 @@ public class PreferencesActivity extends AppCompatActivity {
             ipKey.setText(iKey);
             ipKey.setSummary(iKey);
         }
-
-        /*
-        private void registerUser() {
-            List<String> response = new ArrayList<>();
-            try {
-                response = new WebServiceHandler(getActivity()).execute("registrationRest", "username", prepareUserName(preferences.getString(USERNAME_FIELD, "")), "password", preferences.getString(PASSWORD_FIELD, "")).get();
-            } catch (Exception e) {
-                Log.d("Apps PrefActivity", "An Exception has occured during user's registered " + e);
-            } finally {
-                prepareToastPopup(response.get(0));
-            }
-            Log.d("Apps PrefActivity", "Response: " + response);
-        }
-
-        //Prepare userName to be sent via WebServiceHandler
-        //get device serial number -- check this method on real device !!!!!
-        private static String prepareUserName (String prefName) {
-            String serialNumber;
-            try {
-                Class<?> c = Class.forName("android.os.SystemProperties");
-                Method get = c.getMethod("get", String.class);
-
-                serialNumber = (String) get.invoke(c, "gsm.sn1");
-                if (serialNumber.equals(""))
-                    serialNumber = (String) get.invoke(c, "ril.serialnumber");
-                if (serialNumber.equals(""))
-                    serialNumber = (String) get.invoke(c, "ro.serialno");
-                if (serialNumber.equals(""))
-                    serialNumber = (String) get.invoke(c, "sys.serialnumber");
-                if (serialNumber.equals(""))
-                    serialNumber = Build.SERIAL;
-                // If none of the methods above worked
-                if (serialNumber.equals(""))
-                    serialNumber = null;
-            } catch (Exception e) {
-                e.printStackTrace();
-                serialNumber = null;
-            }
-            Log.d("Apps PrefActivity", "Serial number: " + serialNumber);
-            //replace below number by variable 'serialNumber' for real device
-            return ("123456"+ "_" +prefName);
-        }
-
-        private void prepareToastPopup(String response) {
-            String msg;
-            //An exception has occured durig getting data in Async Task
-            if (response == null) {
-                msg = "Problem z połączeniem podczas rejestracji użytkownika.";
-            } else {
-                switch (response) {
-                    //Response code 200 - user registered successfully
-                    case "200":
-                        msg = "Użytkownik został zarejestrowany.";
-                        break;
-                    //User probably add into db
-                    case "409":
-                        msg = "Nie można zarejestrować użytkownika.";
-                        break;
-                    //No internet connection with serwice
-                    case "0":
-                        msg = "Nie można nawiązać połączenia z serwisem.";
-                        break;
-                    //Other response code
-                    default:
-                        msg = "Wystąpił problem z serwisem podczas rejestracji użytkownika. Response code " + response;
-                }
-            }
-            Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-        }
-        */
     }
 }

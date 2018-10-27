@@ -11,6 +11,7 @@
     <string name="action_refresh">Odśwież</string>
     <string name="openedDrawer">Wybierz z listy:</string>
     <string name="noConnection">Brak połączenia z serwisem!</string>
+    <string name="check_connection">Sprawdź połączenie</string>
 
     <!-- MAIN FRAGMENT -->
     <string name="titleMain">Fragment MainFragment</string>

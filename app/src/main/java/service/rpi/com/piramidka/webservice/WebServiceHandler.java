@@ -1,9 +1,9 @@
 package service.rpi.com.piramidka.webservice;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import org.json.JSONObject;
 import java.io.BufferedInputStream;
@@ -18,8 +18,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.ProgressDialog.STYLE_SPINNER;
-
 /*
 fetched string args: fileLocation, pair of parameters to be sent as list e.g. "key1", "val1", ...
 returned list: <return code>, <message>
@@ -27,7 +25,7 @@ returned list: <return code>, <message>
 public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
 
     private Context context;
-    private ProgressDialog progressDialog;
+    //private ProgressDialog progressDialog;
     private HttpURLConnection connection;
     List<String> response =  new ArrayList<>();
 
@@ -37,13 +35,13 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
 
     protected void onPreExecute() {
         Log.d("Apps WebServiceHandler","onPreExecute");
-        progressDialog = new ProgressDialog(context);
+       /* progressDialog = new ProgressDialog(context);
         progressDialog.setProgressStyle(STYLE_SPINNER);
         progressDialog.setMessage("Łączenie z serwisem...");
         progressDialog.show();
         progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        Log.d("Apps WebServiceHandler","onPreExecute 2");
+        progressDialog.setCanceledOnTouchOutside(false);*/
+       Log.d("Apps WebServiceHandler","onPreExecute 2");
     }
 
     protected List<String> doInBackground(String... params) {
@@ -102,7 +100,7 @@ public class WebServiceHandler extends AsyncTask<String, Void, List<String>> {
 
     protected void onPostExecute( List<String> p) {
         Log.d("Apps WebServiceHandler","OnPostExecute");
-        progressDialog.dismiss();
+       //progressDialog.dismiss();
     }
 
     private String streamToString (InputStream is) {

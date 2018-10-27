@@ -1,11 +1,8 @@
 package service.rpi.com.piramidka;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,8 +11,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import service.rpi.com.piramidka.webservice.WebServiceConnector;
@@ -26,10 +26,12 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private TextView tv;
     private WebServiceConnectorInterface webConnector;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("Apps Main", "Create onCreate.");
         setContentView(R.layout.activity_login);
 
         //add toolbar
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionbar.setDisplayHomeAsUpEnabled(true);;
+        actionbar.setDisplayHomeAsUpEnabled(true);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         tv = findViewById(R.id.titleTextView);
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
-
                         switch (menuItem.getItemId()) {
                             case R.id.weather:
                                 Intent net = new Intent (MainActivity.this, WeatherActivity.class);
@@ -106,20 +107,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        this.menu = menu;
+        Log.d("Apps Main", "Create options menu.");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync);
+        webConnector.updateConnectionIcon(menu);
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         //Create web Connector object
+        Log.d("Apps Main", "Create onStart.");
         webConnector = new WebServiceConnector(MainActivity.this);
         webConnector.connect("registrationCheck/" + webConnector.prepareUserName());
-        webConnector.showToastPopup();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("Apps Main", "Menu item selected: " + item.getItemId());
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.check_connection:
+                webConnector.connect("registrationCheck/" + webConnector.prepareUserName());
+                webConnector.updateConnectionIcon(menu);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -127,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     private void addMainFragment() {
         Fragment mainFragment = new MainFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, mainFragment, "visible_fragment");
+        ft.replace(R.id.mainFragmentHolder, mainFragment, "visible_fragment");
         ft.addToBackStack(null);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();

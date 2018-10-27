@@ -1,10 +1,14 @@
 package service.rpi.com.piramidka.webservice;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.lang.reflect.Method;
@@ -12,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+
+import service.rpi.com.piramidka.R;
 
 /**
  *  Class provides method to connect with webService
@@ -78,11 +84,22 @@ public class WebServiceConnector implements WebServiceConnectorInterface {
             response.add(0, "10");
             response.add(1, e.toString());
             Log.d("Apps PrefActivity", "An Exception has occured during user's registered " + e);
+        } finally {
+            showToastPopup ();
         }
         Log.d("Apps AbsWebServConn", "Response:" + response);
     }
 
-    public void showToastPopup () {
+    public  void updateConnectionIcon (Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.check_connection);
+        if ("200".equals(response.get(0))) {
+            menuItem.setIcon(R.drawable.ic_sync);
+        } else {
+            menuItem.setIcon(R.drawable.ic_sync_problem);
+        }
+    }
+
+    protected void showToastPopup () {
         String msg;
         //An exception has occured durig getting data in Async Task
         if (response.get(0) == null) {
