@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync);
-        new WebServiceConnector(MainActivity.this, menu).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
+        new WebServiceConnector(MainActivity.this, menu, WebServiceConnector.NO_AUTH).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
         return true;
     }
 
@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.check_connection:
-                new WebServiceConnector(MainActivity.this, menu).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
+                new WebServiceConnector(MainActivity.this, menu, WebServiceConnector.NO_AUTH).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

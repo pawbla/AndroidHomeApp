@@ -35,16 +35,25 @@ public class WebServiceConnector extends AsyncTask<String, Void, List<String>> {
     private Context context;
     private MenuItem menuItem;
     private HttpURLConnection connection;
+    private String iP;
+    private boolean auth;
 
     private static final String PREFERENCES_NAME = "Preferences";
     private static final String USERNAME_FIELD = "userName";
+    private static final String IP_FIELD = "ipKey";
+
+    public static final boolean AUTH = true;
+    public static final boolean NO_AUTH = false;
 
     protected List<String> response;
 
-    public WebServiceConnector(Context context, Menu menu) {
+    public WebServiceConnector(Context context, Menu menu, boolean auth) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
         response = new ArrayList<>();
         this.context = context;
+        this.auth = auth;
         this.menuItem =  menu.findItem(R.id.check_connection);
+        iP = preferences.getString(IP_FIELD, null);
     }
 
     /**
@@ -134,11 +143,15 @@ public class WebServiceConnector extends AsyncTask<String, Void, List<String>> {
         response.add(1, "");
         //192.168.1.60
         try {
-            URL url = new URL("http://192.168.1.60:8080/" + params[0]);
+            //192.168.1.60
+            URL url = new URL("http://" + iP + ":8080/" + params[0]);
             Log.d("Apps WebServiceHandler", "doInBackground - 1");
             connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(10000);
-
+            //set authorization header
+            if (auth) {
+                connection.setRequestProperty("Authorization", AuthenticationService.getHeader(context, prepareUserName(context)));
+            }
             //set request property type
             Log.d("Apps WebServiceHandler", "doInBackground - 2");
             //set params as POST data in other case only receive datas via GET request

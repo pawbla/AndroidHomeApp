@@ -12,7 +12,7 @@ public class RegisterUser_WebServiceConnector extends WebServiceConnector {
     private Context context;
 
     public RegisterUser_WebServiceConnector(Context context, Menu menu) {
-        super(context, menu);
+        super(context, menu, WebServiceConnector.NO_AUTH);
         this.context = context;
     }
 
