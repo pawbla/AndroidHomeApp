@@ -1,13 +1,17 @@
 package service.rpi.com.piramidka;
 
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import service.rpi.com.piramidka.webservice.WebServiceConnector;
 
@@ -51,5 +55,14 @@ public class WeatherActivity extends AppCompatActivity {
                 break;
     }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class WeatherFragment extends PreferenceFragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            // Inflate the layout for this fragment
+            Log.d("Apps Main", "Create FRAGMENT.");
+            return inflater.inflate(R.layout.weather_fragment, container, false);
+        }
     }
 }

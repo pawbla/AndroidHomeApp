@@ -24,6 +24,17 @@
     <string name="action_set">Ustaw</string>
     <string name="action_cancel">Usuń</string>
 
+    <!-- WHEATHER STRINGS -->
+    <string name="emptyValue">--.-</string>
+    <string name="emptyTimeValue">--:--</string>
+    <string name="emptyDateValue">--.--</string>
+    <string name="in">IN</string>
+    <string name="out">OUT</string>
+    <string name="tempUnit">°C</string>
+    <string name="humUnit">%</string>
+    <string name="pressUnit">hPa</string>
+    <string name="timeDesc">Aktualizacja:</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
