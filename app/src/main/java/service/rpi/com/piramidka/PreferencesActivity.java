@@ -10,11 +10,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import service.rpi.com.piramidka.webservice.RegisterUser_WebServiceConnector;
-import service.rpi.com.piramidka.webservice.WebServiceConnectorInterface;
+import service.rpi.com.piramidka.webservice.WebServiceConnector;
+
 
 public class PreferencesActivity extends AppCompatActivity {
+
+    private static Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,17 @@ public class PreferencesActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        this.menu = menu;
+        Log.d("Apps Main", "Create options menu.");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync);
+        return true;
+    }
+
     public static class PreferencesFragment extends PreferenceFragment {
 
         private static final String PREFERENCES_NAME = "Preferences";
@@ -44,8 +60,6 @@ public class PreferencesActivity extends AppCompatActivity {
         private EditTextPreference userPassword;
         private EditTextPreference ipKey;
         private Preference regB;
-
-        private WebServiceConnectorInterface webConnector;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -67,9 +81,10 @@ public class PreferencesActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Log.d("Apps","Registration button pressed." + preference.getKey());
-                    webConnector = new RegisterUser_WebServiceConnector(getActivity());
-                    webConnector.connect("registrationRest", "username", webConnector.prepareUserName(), "password", preferences.getString(PASSWORD_FIELD, ""));
+                    //webConnector = new RegisterUser_WebServiceConnector(getActivity(), menu);
+                    //ebConnector.connect("registrationRest", "username", webConnector.prepareUserName(), "password", preferences.getString(PASSWORD_FIELD, ""));
                     //webConnector.showToastPopup();
+                    new RegisterUser_WebServiceConnector(getActivity(), menu).execute("registrationRest", "username",WebServiceConnector.prepareUserName(getActivity()), "password", preferences.getString(PASSWORD_FIELD, ""));
                     return true;
                 }
             });
@@ -102,6 +117,7 @@ public class PreferencesActivity extends AppCompatActivity {
             });
 
         }
+
         private void updatePreferences(Preference p, Object newValue, EditTextPreference t) {
             Log.d("Apps PrefActivity","Preference change save. New value: " + newValue + " key: " + p.getKey());
             SharedPreferences.Editor editor = preferences.edit();

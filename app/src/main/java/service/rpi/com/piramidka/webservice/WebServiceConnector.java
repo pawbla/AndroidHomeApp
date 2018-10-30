@@ -1,57 +1,59 @@
 package service.rpi.com.piramidka.webservice;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 
 import service.rpi.com.piramidka.R;
 
 /**
  *  Class provides method to connect with webService
  */
-public class WebServiceConnector implements WebServiceConnectorInterface {
+public class WebServiceConnector extends AsyncTask<String, Void, List<String>> {
 
-    private SharedPreferences preferences;
     private Context context;
+    private MenuItem menuItem;
+    private HttpURLConnection connection;
 
     private static final String PREFERENCES_NAME = "Preferences";
     private static final String USERNAME_FIELD = "userName";
 
     protected List<String> response;
 
-    public WebServiceConnector(Context context) {
+    public WebServiceConnector(Context context, Menu menu) {
         response = new ArrayList<>();
         this.context = context;
-    }
-
-    public String getStatusCode () {
-        return response.get(0);
-    }
-
-    public String getReceivedMessage () {
-            return response.get(1);
+        this.menuItem =  menu.findItem(R.id.check_connection);
     }
 
     /**
      * Prepare username as a string based on device serial ID and entered userName
      * @return username
      */
-    public String prepareUserName () {
+    public static String prepareUserName (Context context) {
         //get preferences
-        preferences = context.getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
         String serialNumber;
         try {
             Class<?> c = Class.forName("android.os.SystemProperties");
@@ -77,21 +79,7 @@ public class WebServiceConnector implements WebServiceConnectorInterface {
         return ("123456"+ "_" +preferences.getString(USERNAME_FIELD, null));
     }
 
-    public void connect (String... data) {
-        try {
-            response = new WebServiceHandler(context).execute(data).get();
-        } catch (CancellationException | ExecutionException | InterruptedException e) {
-            response.add(0, "10");
-            response.add(1, e.toString());
-            Log.d("Apps PrefActivity", "An Exception has occured during user's registered " + e);
-        } finally {
-            showToastPopup ();
-        }
-        Log.d("Apps AbsWebServConn", "Response:" + response);
-    }
-
-    public  void updateConnectionIcon (Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.check_connection);
+    private void updateConnectionIcon () {
         if ("200".equals(response.get(0))) {
             menuItem.setIcon(R.drawable.ic_sync);
         } else {
@@ -130,5 +118,91 @@ public class WebServiceConnector implements WebServiceConnectorInterface {
         if (msg != null) {
             Toast.makeText(context.getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
+    }
+
+    protected void onPreExecute() {
+        super.onPreExecute();
+        Log.d("Apps WebServiceHandler","onPreExecute");
+        menuItem.setActionView(R.layout.progress_bar);
+        menuItem.expandActionView();
+        Log.d("Apps WebServiceHandler","onPreExecute 2");
+    }
+
+    protected List<String> doInBackground(String... params) {
+        Log.d("Apps WebServiceHandler","doInBackground. Params length: " + params.length);
+        response.add(0, "");
+        response.add(1, "");
+        //192.168.1.60
+        try {
+            URL url = new URL("http://192.168.1.60:8080/" + params[0]);
+            Log.d("Apps WebServiceHandler", "doInBackground - 1");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(10000);
+
+            //set request property type
+            Log.d("Apps WebServiceHandler", "doInBackground - 2");
+            //set params as POST data in other case only receive datas via GET request
+            if (params.length > 1) {
+                Log.d("Apps WebServiceHandler", "doInBackground - 3 - POST");
+
+                //set request method
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+                //create objects to sending datas
+                JSONObject data = new JSONObject();
+                //prepare data to be sent via POST - assign pair of datas
+                for (int i = 1; i < params.length; i = i + 2) {
+                    Log.d("Apps WebServiceHandler", "doInBackground - 4 - put data " + i);
+                    data.put(params[i], params[i+1]);
+                }
+
+                //send object
+                Log.d("Apps WebServiceHandler", "doInBackground - 5");
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+                writer.write(data.toString());
+                writer.close();
+            }
+            connection.connect();
+            Log.d("Apps WebServiceHandler", "doInBackground - 6: " + connection.getResponseCode());
+            response.add(0, Integer.toString(connection.getResponseCode()));
+            if (connection.getResponseCode() == 200) {
+                //fetch data
+                InputStream in = new BufferedInputStream(connection.getInputStream());
+                response.add(1, streamToString(in));
+                //close connection
+                Log.d("Apps WebServiceHandler","Response code: " + connection.getResponseCode() + " resp:" + response);
+                connection.disconnect();
+            }
+        } catch (Exception e) {
+            response.add(0, "0");
+            Log.w("Apps WebServiceHandler","Exception has appeared: " + e);
+        }
+        Log.w("Apps WebServiceHandler","Response generated: response code " + response.get(0) + " message: " + response.get(1));
+        return response;
+    }
+
+    protected void onPostExecute( List<String> p) {
+        Log.d("Apps WebServiceHandler","OnPostExecute");
+        menuItem.collapseActionView();
+        menuItem.setActionView(null);
+        showToastPopup ();
+        updateConnectionIcon();
+    }
+
+    private String streamToString (InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+        Log.d("HomeApp", "Stream to string");
+        try {
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+            reader.close();
+        } catch (IOException e) {
+            Log.w("HomeApp", "Convert STREAM TO STRING error has occurred: " + e);
+        }
+        return stringBuilder.toString();
     }
 }

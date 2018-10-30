@@ -2,6 +2,7 @@ package service.rpi.com.piramidka.webservice;
 
 
 import android.content.Context;
+import android.view.Menu;
 import android.widget.Toast;
 
 /**
@@ -10,8 +11,8 @@ import android.widget.Toast;
 public class RegisterUser_WebServiceConnector extends WebServiceConnector {
     private Context context;
 
-    public RegisterUser_WebServiceConnector(Context context) {
-        super(context);
+    public RegisterUser_WebServiceConnector(Context context, Menu menu) {
+        super(context, menu);
         this.context = context;
     }
 

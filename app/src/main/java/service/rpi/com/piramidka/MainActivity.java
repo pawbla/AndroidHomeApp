@@ -15,17 +15,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import service.rpi.com.piramidka.webservice.WebServiceConnector;
-import service.rpi.com.piramidka.webservice.WebServiceConnectorInterface;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private TextView tv;
-    private WebServiceConnectorInterface webConnector;
     private Menu menu;
 
     @Override
@@ -86,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDrawerOpened(View drawerView) {
                         // Respond when the drawer is opened
-                        //invalidateOptionsMenu();
                         Log.d("Apps Main", "Open drawer ");
                     }
 
@@ -114,17 +109,8 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync);
-        webConnector.updateConnectionIcon(menu);
+        new WebServiceConnector(MainActivity.this, menu).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
         return true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //Create web Connector object
-        Log.d("Apps Main", "Create onStart.");
-        webConnector = new WebServiceConnector(MainActivity.this);
-        webConnector.connect("registrationCheck/" + webConnector.prepareUserName());
     }
 
     @Override
@@ -135,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.check_connection:
-                webConnector.connect("registrationCheck/" + webConnector.prepareUserName());
-                webConnector.updateConnectionIcon(menu);
+                new WebServiceConnector(MainActivity.this, menu).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
         }
         return super.onOptionsItemSelected(item);
     }
