@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <!-- WEATHER COLORS-->
+    <color name="tabBackError">#FF0000</color>
     <color name="tabBack">#DEDFDE</color>
     <color name="font">#000000</color>
 </resources>

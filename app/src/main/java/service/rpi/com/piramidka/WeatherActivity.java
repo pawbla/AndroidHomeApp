@@ -2,6 +2,7 @@ package service.rpi.com.piramidka;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView pressure;
     private TextView measTime;
     private TextView measDate;
+    private static boolean inErrFlag;
+    private static boolean outErrFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     private void updateMeasuredValues() {
         String datas = "";
+        String errorMsg = "";
         try {
            datas = new WebServiceConnector(WeatherActivity.this, menu, WebServiceConnector.AUTH)
                     .execute("weatherRest").get().get(1);
@@ -100,21 +105,62 @@ public class WeatherActivity extends AppCompatActivity {
             Toast.makeText(WeatherActivity.this, "Wystąpił problem podczas odczytu danych.", Toast.LENGTH_LONG).show();
         }
         Log.d("Apps Weather", "Update data measured for: " + datas);
+        Log.d("Apps ERROR_FLAG" , "IN Error flag 1: " + inErrFlag);
         try {
             JSONObject json = new JSONObject(datas);
             JSONObject inSens = json.getJSONObject("inSensor");
             JSONObject outSens = json.getJSONObject("outSensor");
-            inTemp.setText(inSens.optString("temperature"));
-            inHum.setText(inSens.optString("humidity"));
-            pressure.setText(inSens.optString("pressure"));
-            outTemp.setText(outSens.optString("temperature"));
-            outHum.setText(outSens.optString("humidity"));
-            measDate.setText(inSens.optString("date"));
-            measTime.setText(inSens.optString("date"));
-            //2018-11-06 18:19:57
+            if (inSens.getInt("statusCode") == 200) {
+                if (inErrFlag == true) {
+                    Log.d("Apps Err_flag" , "IN Error flag 2: " + inErrFlag);
+                    refreshRawColour(R.id.tableRow1, R.color.tabBack);
+                    refreshRawColour(R.id.tableRow2, R.color.tabBack);
+                    refreshRawColour(R.id.tableRow7, R.color.tabBack);
+                }
+                inTemp.setText(inSens.optString("temperature"));
+                inHum.setText(inSens.optString("humidity"));
+                pressure.setText(inSens.optString("pressure"));
+                measTime.setText(inSens.optString("date").substring(0,5));
+                measDate.setText(inSens.optString("date").substring(6,11));
+            } else {
+                inErrFlag = true;
+                Log.d("Apps ERROR_FLAG" , "IN Error flag 3 : " + inErrFlag);
+                refreshRawColour(R.id.tableRow1, R.color.tabBackError);
+                refreshRawColour(R.id.tableRow2, R.color.tabBackError);
+                refreshRawColour(R.id.tableRow7, R.color.tabBackError);
+                errorMsg = "Problem z odczytem z czujnika wewnątrz: Error Code: " + inSens.getInt("statusCode")
+                + "\nAktualny odczyt: " + inSens.optString("date");
+            }
+            if (outSens.getInt("statusCode") == 200) {
+                if (outErrFlag == true) {
+                    refreshRawColour(R.id.tableRow4, R.color.tabBack);
+                    refreshRawColour(R.id.tableRow6, R.color.tabBack);
+                }
+                outTemp.setText(outSens.optString("temperature"));
+                outHum.setText(outSens.optString("humidity"));
+                measTime.setText(outSens.optString("date").substring(0,5));
+                measDate.setText(outSens.optString("date").substring(6,11));
+            } else {
+                outErrFlag = true;
+                refreshRawColour(R.id.tableRow4, R.color.tabBackError);
+                refreshRawColour(R.id.tableRow6, R.color.tabBackError);
+                if (!errorMsg.isEmpty()) {
+                    errorMsg = errorMsg + "/n";
+                }
+                errorMsg = errorMsg + "Problem z odczytem z czujnika na zewnątrz: Error Code: " + outSens.getInt("statusCode")
+                + "\nAktualny odczyt: " + outSens.optString("date");
+            }
+            if (!errorMsg.isEmpty()) {
+                Toast.makeText(WeatherActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+            }
         } catch (JSONException e) {
             Log.w("Apps Weather", "An exception has occured during JSON conversion: " + e);
             Toast.makeText(WeatherActivity.this, "Wystąpił problem podczas konwersji danych.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void refreshRawColour(int raw, int color) {
+        final TableRow tableRow = findViewById(raw);
+        tableRow.setBackgroundColor(color);
     }
 }

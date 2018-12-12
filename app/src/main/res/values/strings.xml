@@ -27,7 +27,7 @@
 
     <!-- WHEATHER STRINGS -->
     <string name="weatherTitle">Pogoda</string>
-    <string name="emptyValue">--.-</string>
+    <string name="emptyValue">--</string>
     <string name="emptyTimeValue">--:--</string>
     <string name="emptyDateValue">--.--</string>
     <string name="in">IN</string>
