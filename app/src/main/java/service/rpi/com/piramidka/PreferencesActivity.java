@@ -33,6 +33,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
         //add up icon to Action Bar
         ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle(R.string.confTitle);
         actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -81,9 +82,6 @@ public class PreferencesActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Log.d("Apps","Registration button pressed." + preference.getKey());
-                    //webConnector = new RegisterUser_WebServiceConnector(getActivity(), menu);
-                    //ebConnector.connect("registrationRest", "username", webConnector.prepareUserName(), "password", preferences.getString(PASSWORD_FIELD, ""));
-                    //webConnector.showToastPopup();
                     new RegisterUser_WebServiceConnector(getActivity(), menu).execute("registrationRest", "username",WebServiceConnector.prepareUserName(getActivity()), "password", preferences.getString(PASSWORD_FIELD, ""));
                     return true;
                 }

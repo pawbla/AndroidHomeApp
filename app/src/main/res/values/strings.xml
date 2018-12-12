@@ -19,12 +19,14 @@
     <string name="subNameApp">Aplikacja mobilna</string>
 
     <!-- CONFIGURATION STRINGS -->
+    <string name="confTitle">Ustawienia</string>
     <string name="setUser">Podaj nazwę użytkownika</string>
     <string name="setIP">Podaj IP RPi</string>
     <string name="action_set">Ustaw</string>
     <string name="action_cancel">Usuń</string>
 
     <!-- WHEATHER STRINGS -->
+    <string name="weatherTitle">Pogoda</string>
     <string name="emptyValue">--.-</string>
     <string name="emptyTimeValue">--:--</string>
     <string name="emptyDateValue">--.--</string>

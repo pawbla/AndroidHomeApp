@@ -44,6 +44,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         //add up icon to Action Bar
         ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle(R.string.weatherTitle);
         actionbar.setDisplayHomeAsUpEnabled(true);
 
         //activity controls

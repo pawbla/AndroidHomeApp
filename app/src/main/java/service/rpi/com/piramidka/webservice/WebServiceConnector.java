@@ -83,9 +83,8 @@ public class WebServiceConnector extends AsyncTask<String, Void, List<String>> {
             e.printStackTrace();
             serialNumber = null;
         }
-        Log.d("Apps PrefActivity", "Serial number: " + serialNumber);
-        //replace below number by variable 'serialNumber' for real device
-        return ("123456"+ "_" +preferences.getString(USERNAME_FIELD, null));
+        Log.d("Apps WebServiceConn", "Serial number: " + serialNumber);
+        return (serialNumber + "_" +preferences.getString(USERNAME_FIELD, null));
     }
 
     private void updateConnectionIcon () {
