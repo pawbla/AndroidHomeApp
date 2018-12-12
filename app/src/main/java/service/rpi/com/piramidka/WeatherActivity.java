@@ -109,8 +109,8 @@ public class WeatherActivity extends AppCompatActivity {
             pressure.setText(inSens.optString("pressure"));
             outTemp.setText(outSens.optString("temperature"));
             outHum.setText(outSens.optString("humidity"));
-            measDate.setText(inSens.optString("date").substring(5, 10));
-            measTime.setText(inSens.optString("date").substring(11, 16));
+            measDate.setText(inSens.optString("date"));
+            measTime.setText(inSens.optString("date"));
             //2018-11-06 18:19:57
         } catch (JSONException e) {
             Log.w("Apps Weather", "An exception has occured during JSON conversion: " + e);
