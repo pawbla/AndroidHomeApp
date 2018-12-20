@@ -105,14 +105,12 @@ public class WeatherActivity extends AppCompatActivity {
             Toast.makeText(WeatherActivity.this, "Wystąpił problem podczas odczytu danych.", Toast.LENGTH_LONG).show();
         }
         Log.d("Apps Weather", "Update data measured for: " + datas);
-        Log.d("Apps ERROR_FLAG" , "IN Error flag 1: " + inErrFlag);
         try {
             JSONObject json = new JSONObject(datas);
             JSONObject inSens = json.getJSONObject("inSensor");
             JSONObject outSens = json.getJSONObject("outSensor");
             if (inSens.getInt("statusCode") == 200) {
                 if (inErrFlag == true) {
-                    Log.d("Apps Err_flag" , "IN Error flag 2: " + inErrFlag);
                     refreshRawColour(R.id.tableRow1, R.color.tabBack);
                     refreshRawColour(R.id.tableRow2, R.color.tabBack);
                     refreshRawColour(R.id.tableRow7, R.color.tabBack);
@@ -124,7 +122,6 @@ public class WeatherActivity extends AppCompatActivity {
                 measDate.setText(inSens.optString("date").substring(6,11));
             } else {
                 inErrFlag = true;
-                Log.d("Apps ERROR_FLAG" , "IN Error flag 3 : " + inErrFlag);
                 refreshRawColour(R.id.tableRow1, R.color.tabBackError);
                 refreshRawColour(R.id.tableRow2, R.color.tabBackError);
                 refreshRawColour(R.id.tableRow7, R.color.tabBackError);

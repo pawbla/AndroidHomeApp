@@ -55,6 +55,7 @@ public class PreferencesActivity extends AppCompatActivity {
         private static final String PASSWORD_FIELD = "userPassword";
         private static final String IP_FIELD = "ipKey";
         private static final String REG_B = "reg";
+        private static final String REGISTRATION_EMAIL = "android@android.device";
 
         private SharedPreferences preferences;
         private EditTextPreference userName;
@@ -82,7 +83,8 @@ public class PreferencesActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Log.d("Apps","Registration button pressed." + preference.getKey());
-                    new RegisterUser_WebServiceConnector(getActivity(), menu).execute("registrationRest", "username",WebServiceConnector.prepareUserName(getActivity()), "password", preferences.getString(PASSWORD_FIELD, ""));
+                    new RegisterUser_WebServiceConnector(getActivity(), menu).execute("registrationRest",
+                            "username",WebServiceConnector.prepareUserName(getActivity()), "password", preferences.getString(PASSWORD_FIELD, ""), "email", REGISTRATION_EMAIL);
                     return true;
                 }
             });
