@@ -15,7 +15,7 @@
 
     <!-- MAIN FRAGMENT -->
     <string name="titleMain">Fragment MainFragment</string>
-    <string name="nameApp">RPi Home System</string>
+    <string name="nameApp">RPi IoT Home System</string>
     <string name="subNameApp">Aplikacja mobilna</string>
 
     <!-- CONFIGURATION STRINGS -->
