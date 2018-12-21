@@ -25,11 +25,11 @@ public class RegisterUser_WebServiceConnector extends WebServiceConnector {
             switch (response.get(0)) {
                 //Response code 200 - user registered successfully
                 case "200":
-                    msg = "To urządzenie zostało już zarejestrowane.";
+                    msg = "Urządzenie zostało zarejestrowane.";
                     break;
                 //User probably add into db
                 case "409":
-                    msg = "Nie można zarejestrować użytkownika.";
+                    msg = "Nie można zarejestrować użytkownika.\nTo użądzenie prawdopodobnie zostało już zarejestrowane";
                     break;
                 //No internet connection with serwice
                 case "0":

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PiRaMidka</string>
+    <string name="app_name">IoT Home</string>
     <string name="weatherMenu">Pogoda</string>
     <string name="settingsMenu">Ustawienia</string>
 

@@ -140,9 +140,7 @@ public class WebServiceConnector extends AsyncTask<String, Void, List<String>> {
         Log.d("Apps WebServiceHandler","doInBackground. Params length: " + params.length);
         response.add(0, "");
         response.add(1, "");
-        //192.168.1.60
         try {
-            //192.168.1.60
             URL url = new URL("http://" + iP + ":8080/" + params[0]);
             Log.d("Apps WebServiceHandler", "doInBackground - 1");
             connection = (HttpURLConnection) url.openConnection();
