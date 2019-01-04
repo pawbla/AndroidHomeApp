@@ -13,6 +13,10 @@
     <string name="noConnection">Brak połączenia z serwisem!</string>
     <string name="check_connection">Sprawdź połączenie</string>
 
+    <string name="positiveButton">OK</string>
+    <string name="negativeButton">Cancel</string>
+
+
     <!-- MAIN FRAGMENT -->
     <string name="titleMain">Fragment MainFragment</string>
     <string name="nameApp">RPi IoT Home System</string>
@@ -36,6 +40,19 @@
     <string name="humUnit">%</string>
     <string name="pressUnit">hPa</string>
     <string name="timeDesc">Aktualizacja:</string>
+
+    <!-- PREFERENCES -->
+    <string name="titleSettings">Podstawowe ustawienia</string>
+    <string name="userSettingsTitle">Użytkownik</string>
+    <string name="userSettingsMsg">Edytuj nazwę użytkownika</string>
+    <string name="passSettingsTitle">Hasło</string>
+    <string name="passSettingsMsg">Podaj hasło</string>
+    <string name="ipSettingsTitle">IP/adres serwera</string>
+    <string name="ipSettingsMsg">Edytuj adres lub IP serwera</string>
+    <string name="ipSettingsTitle2">Adres serwera</string>
+    <string name="registerSettings">Rejestruj</string>
+    <string name="sumSettings">Zarejestruj używająć podanego użytkownika i IP</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

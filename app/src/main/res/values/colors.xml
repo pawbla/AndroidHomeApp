@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="rpiAppColor">#00BB00</color>
+    <color name="toolbarColor">#DEDFDE</color>
 
     <!-- WEATHER COLORS-->
     <color name="tabBackError">#FF0000</color>

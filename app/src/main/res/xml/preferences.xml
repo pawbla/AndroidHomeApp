@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="Podstawowe ustawienia">
+    <PreferenceCategory android:title="@string/titleSettings">
         <EditTextPreference
-            android:dialogTitle="Użytkownik"
+            android:dialogTitle="@string/userSettingsTitle"
             android:key="userName"
             android:summary=""
-            android:positiveButtonText="OK"
-            android:negativeButtonText="Cancel"
-            android:dialogMessage="Edytuj nazwę użytkownika"
-            android:title="Użytkownik" />
+            android:positiveButtonText="@string/positiveButton"
+            android:negativeButtonText="@string/negativeButton"
+            android:dialogMessage="@string/userSettingsMsg"
+            android:title="@string/userSettingsTitle" />
         <EditTextPreference
-            android:dialogTitle="Hasło"
+            android:dialogTitle="@string/passSettingsTitle"
             android:key="userPassword"
             android:summary=""
-            android:positiveButtonText="OK"
-            android:negativeButtonText="Cancel"
-            android:dialogMessage="Podaj hasło"
-            android:title="Hasło"
+            android:positiveButtonText="@string/positiveButton"
+            android:negativeButtonText="@string/negativeButton"
+            android:dialogMessage="@string/passSettingsMsg"
+            android:title="@string/passSettingsTitle"
             android:inputType="textPassword"/>
         <EditTextPreference
-            android:dialogTitle="IP/adres serwera"
+            android:dialogTitle="@string/ipSettingsTitle"
             android:key="ipKey"
             android:summary=""
-            android:positiveButtonText="OK"
-            android:negativeButtonText="Cancel"
-            android:dialogMessage="Edytuj adres lub IP serwera"
-            android:title="Adres serwera" />
+            android:positiveButtonText="@string/positiveButton"
+            android:negativeButtonText="@string/negativeButton"
+            android:dialogMessage="@string/ipSettingsMsg"
+            android:title="@string/ipSettingsTitle2" />
         <Preference
-            android:title="Rejestruj"
+            android:title="@string/registerSettings"
             android:key="reg"
-            android:summary="Zarejestruj używająć podanego użytkownika i IP"/>
+            android:summary="@string/sumSettings"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

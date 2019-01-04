@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Toast;
 
 import service.rpi.com.piramidka.webservice.RegisterUser_WebServiceConnector;
 import service.rpi.com.piramidka.webservice.WebServiceConnector;
