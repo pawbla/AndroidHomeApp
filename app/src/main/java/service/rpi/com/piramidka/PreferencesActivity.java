@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -94,8 +96,10 @@ public class PreferencesActivity extends AppCompatActivity {
             ipKey.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    updatePreferences(preference, newValue, ipKey);
-                    return false;
+                    if (validateField(newValue, getString(R.string.ipSettingsTitle), 6, 100)) {
+                        updatePreferences(preference, newValue, ipKey);
+                    }
+                    return true;
                 }
             });
 
@@ -103,7 +107,9 @@ public class PreferencesActivity extends AppCompatActivity {
             userName.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    updatePreferences(preference, newValue, userName);
+                    if (validateField(newValue, getString(R.string.userSettingsTitle), 4, 40)) {
+                        updatePreferences(preference, newValue, userName);
+                    }
                     return true;
                 }
             });
@@ -112,7 +118,9 @@ public class PreferencesActivity extends AppCompatActivity {
             userPassword.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    updatePreferences(preference, newValue, userPassword);
+                    if (validateField(newValue, getString(R.string.passSettingsTitle), 8, 20)) {
+                        updatePreferences(preference, newValue, userPassword);
+                    }
                     return true;
                 }
             });
@@ -125,6 +133,30 @@ public class PreferencesActivity extends AppCompatActivity {
             editor.putString(p.getKey(), newValue.toString());
             editor.commit();
             t.setSummary(newValue.toString());
+        }
+
+        private boolean validateField(Object value, String popupName, int min, int max) {
+            boolean ret = true;
+            final String msgEmpty = "Nie podałeś wartości.";
+            final String msgIncLength = "Niepoprawna ilość znaków. \nPole powinno zawierać pomiędzy " + min + ", a " + max + " znaków.";
+            final String val = (String) value;
+            if (value.equals("") || value == null) {
+                showAlertPopup(popupName, msgEmpty);
+                ret = false;
+            } else if (val.length() < min || val.length() > max) {
+                showAlertPopup(popupName, msgIncLength);
+                ret = false;
+            }
+
+            return ret;
+        }
+
+        private void showAlertPopup(String popupName, String msg) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(popupName);
+            builder.setMessage(msg);
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.show();
         }
 
         private void initPreferences() {
