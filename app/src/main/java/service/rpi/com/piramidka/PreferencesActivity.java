@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.widget.Toast;
 
 import service.rpi.com.piramidka.webservice.RegisterUser_WebServiceConnector;
 import service.rpi.com.piramidka.webservice.WebServiceConnector;
@@ -47,7 +45,7 @@ public class PreferencesActivity extends AppCompatActivity {
         Log.d("Apps Main", "Create options menu.");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync);
+        menu.findItem(R.id.check_connection).setVisible(false);
         return true;
     }
 
@@ -86,6 +84,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Log.d("Apps","Registration button pressed." + preference.getKey());
+                    menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync).setVisible(true);
                     new RegisterUser_WebServiceConnector(getActivity(), menu).execute("registrationRest",
                             "username",WebServiceConnector.prepareUserName(getActivity()), "password", preferences.getString(PASSWORD_FIELD, ""), "email", REGISTRATION_EMAIL);
                     return true;

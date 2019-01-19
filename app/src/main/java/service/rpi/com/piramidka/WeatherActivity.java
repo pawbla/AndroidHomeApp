@@ -2,7 +2,6 @@ package service.rpi.com.piramidka;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +26,7 @@ import service.rpi.com.piramidka.webservice.WebServiceConnector;
 public class WeatherActivity extends AppCompatActivity {
 
     private Menu menu;
+    private  ActionBar actionbar;
     private TextView inTemp;
     private TextView inHum;
     private TextView outTemp;
@@ -47,7 +47,7 @@ public class WeatherActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         //add up icon to Action Bar
-        ActionBar actionbar = getSupportActionBar();
+        actionbar = getSupportActionBar();
         actionbar.setTitle(R.string.weatherTitle);
         actionbar.setDisplayHomeAsUpEnabled(true);
 

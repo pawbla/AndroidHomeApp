@@ -102,27 +102,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        this.menu = menu;
-        Log.d("Apps Main", "Create options menu.");
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync);
-        new WebServiceConnector(MainActivity.this, menu, WebServiceConnector.NO_AUTH).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("Apps Main", "Menu item selected: " + item.getItemId());
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.check_connection:
-                new WebServiceConnector(MainActivity.this, menu, WebServiceConnector.NO_AUTH).execute("registrationCheck/" + WebServiceConnector.prepareUserName(MainActivity.this));
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
