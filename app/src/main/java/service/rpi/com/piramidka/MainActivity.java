@@ -1,9 +1,12 @@
 package service.rpi.com.piramidka;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,15 +23,34 @@ import service.rpi.com.piramidka.webservice.WebServiceConnector;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Constants
+     */
+    private static final String PREFERENCES_NAME = "Preferences";
+    private static final String USERNAME_FIELD = "userName";
+    private static final String PASSWORD_FIELD = "userPassword";
+
+    /**
+     * Variables
+     */
     private DrawerLayout mDrawerLayout;
     private TextView tv;
-    private Menu menu;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("Apps Main", "Create onCreate.");
         setContentView(R.layout.activity_login);
+
+        preferences = MainActivity.this.getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
+
+        //validate not empty user and password
+        if (preferences.getString(USERNAME_FIELD, "").isEmpty() || preferences.getString(PASSWORD_FIELD, "").isEmpty() ) {
+            Log.d("Apps Main", "User name or password is empty. Registration Activity involved.");
+            Intent net = new Intent(MainActivity.this, RegistrationActivity.class);
+            startActivity(net);
+        }
 
         //add toolbar
         Toolbar myToolbar = findViewById(R.id.main_toolbar);

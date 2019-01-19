@@ -22,7 +22,13 @@
     <string name="nameApp">RPi IoT Home System</string>
     <string name="subNameApp">Aplikacja mobilna</string>
 
-    <!-- CONFIGURATION STRINGS -->
+    <!-- REGISTRATION STRINGS -->
+    <string name="preferencesTitle">Rejestracja użytkownika</string>
+    <string name="titleRegistration">Podaj nazwę Użytkownika i hasło</string>
+    <string name="contRegistration">Idź dalej</string>
+    <string name="textRegistration">Przejdź do Ustawień celem rejestracji Użytkownika w systemie</string>
+
+    <!-- PREFERENCES STRINGS -->
     <string name="confTitle">Ustawienia</string>
     <string name="setUser">Podaj nazwę użytkownika</string>
     <string name="setIP">Podaj IP RPi</string>
@@ -52,6 +58,8 @@
     <string name="ipSettingsTitle2">Adres serwera</string>
     <string name="registerSettings">Rejestruj</string>
     <string name="sumSettings">Zarejestruj używająć podanego użytkownika i IP</string>
+    <string name="userResetButton">Resetuj</string>
+    <string name="userResetInfo">Resetuj Użytkownika i Hasło</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

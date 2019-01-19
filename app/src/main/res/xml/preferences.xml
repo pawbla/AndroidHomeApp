@@ -2,22 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="@string/titleSettings">
         <EditTextPreference
-            android:dialogTitle="@string/userSettingsTitle"
-            android:key="userName"
-            android:summary=""
-            android:positiveButtonText="@string/positiveButton"
-            android:negativeButtonText="@string/negativeButton"
-            android:dialogMessage="@string/userSettingsMsg"
-            android:title="@string/userSettingsTitle" />
-        <EditTextPreference
-            android:dialogTitle="@string/passSettingsTitle"
-            android:key="userPassword"
-            android:summary=""
-            android:positiveButtonText="@string/positiveButton"
-            android:negativeButtonText="@string/negativeButton"
-            android:dialogMessage="@string/passSettingsMsg"
-            android:title="@string/passSettingsTitle"
-            android:inputType="textPassword"/>
+            android:key="logUser"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:selectable="false"/>
         <EditTextPreference
             android:dialogTitle="@string/ipSettingsTitle"
             android:key="ipKey"
@@ -30,6 +19,10 @@
             android:title="@string/registerSettings"
             android:key="reg"
             android:summary="@string/sumSettings"/>
+        <Preference
+            android:title="@string/userResetButton"
+            android:key="reg"
+            android:summary="@string/userResetInfo"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

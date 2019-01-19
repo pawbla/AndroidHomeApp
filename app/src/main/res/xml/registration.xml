@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="@string/titleRegistration">
+        <EditTextPreference
+            android:dialogTitle="@string/userSettingsTitle"
+            android:key="userName"
+            android:summary=""
+            android:positiveButtonText="@string/positiveButton"
+            android:negativeButtonText="@string/negativeButton"
+            android:dialogMessage="@string/userSettingsMsg"
+            android:title="@string/userSettingsTitle" />
+        <EditTextPreference
+            android:dialogTitle="@string/passSettingsTitle"
+            android:key="userPassword"
+            android:summary=""
+            android:positiveButtonText="@string/positiveButton"
+            android:negativeButtonText="@string/negativeButton"
+            android:dialogMessage="@string/passSettingsMsg"
+            android:title="@string/passSettingsTitle"
+            android:inputType="textPassword"/>
+        <Preference
+            android:title="@string/contRegistration"
+            android:key="contRegistration"
+            android:summary="@string/textRegistration"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
