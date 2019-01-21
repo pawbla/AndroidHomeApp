@@ -60,7 +60,10 @@
     <string name="sumSettings">Zarejestruj używająć podanego użytkownika i IP</string>
     <string name="userResetButton">Resetuj</string>
     <string name="userResetInfo">Resetuj Użytkownika i Hasło</string>
-
+    <string name="yesNoTitle">Uwaga</string>
+    <string name="yesNoMsg">Czy jesteś pewny, że chcesz usunąć dane Użytkownika oraz hasło?</string>
+    <string name="yesNoYes">Tak</string>
+    <string name="yesNoNo">Nie</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

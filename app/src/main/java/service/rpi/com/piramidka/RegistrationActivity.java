@@ -75,6 +75,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (preferences.getString(USERNAME_FIELD, "").isEmpty() || preferences.getString(PASSWORD_FIELD, "").isEmpty() ) {
                         showAlertPopup(popupName, msgEmpty);
                     } else {
+                        userName.setText("");
+                        userPassword.setText("");
                         Intent net = new Intent (getActivity(), PreferencesActivity.class);
                         startActivity(net);
                     }

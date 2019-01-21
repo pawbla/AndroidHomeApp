@@ -1,6 +1,7 @@
 package service.rpi.com.piramidka;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -56,12 +57,14 @@ public class PreferencesActivity extends AppCompatActivity {
         private static final String PASSWORD_FIELD = "userPassword";
         private static final String IP_FIELD = "ipKey";
         private static final String REG_B = "reg";
+        private static final String RESET_BUTTON = "reset";
         private static final String LOGGED_USER = "logUser";
         private static final String REGISTRATION_EMAIL = "android@android.device";
 
         private SharedPreferences preferences;
         private EditTextPreference ipKey;
         private Preference regB;
+        private Preference resetButton;
         private EditTextPreference logUser;
 
         @Override
@@ -73,6 +76,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
             ipKey = (EditTextPreference) findPreference(IP_FIELD);
             regB = findPreference(REG_B);
+            resetButton = findPreference(RESET_BUTTON);
             logUser = (EditTextPreference)findPreference(LOGGED_USER);
 
             //set preferences field during onCreate
@@ -86,6 +90,16 @@ public class PreferencesActivity extends AppCompatActivity {
                     menu.findItem(R.id.check_connection).setIcon(R.drawable.ic_sync).setVisible(true);
                     new RegisterUser_WebServiceConnector(getActivity(), menu).execute("registrationRest",
                             "username",WebServiceConnector.prepareUserName(getActivity()), "password", preferences.getString(PASSWORD_FIELD, ""), "email", REGISTRATION_EMAIL);
+                    return true;
+                }
+            });
+
+            // Reset button button
+            resetButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Log.d("Apps","Reset button pressed." + preference.getKey());
+                    yesNoAlertPopup().show();
                     return true;
                 }
             });
@@ -139,6 +153,29 @@ public class PreferencesActivity extends AppCompatActivity {
             logUser.setTitle("Użytkownik: " + preferences.getString(USERNAME_FIELD, ""));
             ipKey.setText(iKey);
             ipKey.setSummary(iKey);
+        }
+
+        private AlertDialog yesNoAlertPopup() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.yesNoMsg)
+                    .setTitle(R.string.yesNoTitle);
+            builder.setPositiveButton(R.string.yesNoYes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked YES button
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(USERNAME_FIELD, "");
+                    editor.putString(PASSWORD_FIELD, "");
+                    editor.apply();
+                }
+            });
+            builder.setNegativeButton(R.string.yesNoNo, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked NO button
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            return dialog;
         }
     }
 }
